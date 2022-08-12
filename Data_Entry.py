@@ -3,18 +3,20 @@ import sys
 import time
 import pyautogui
 
-known_patterns = {"jacks": "jacks", "mini-jacks": "mini-jacks", "jump-jacks": "jump-jacks", "split-jump-jacks": "split-jump-jacks", "hand-jacks": "hand-jacks", "anchors": "anchors", "streams": "streams", "running-men": "running-men", "polyrhythms": "polyrhythms", "jump-streams": "jump-streams", 'hand-streams': 'hand-streams', 'bursts': 'bursts', 'trills': 'trills', 'jump-trills': 'jump-trills', 'split-jump-trills': 'split-jump-trills', 'one-hand-trills': 'one-hand-trills', 'rolls': 'rolls', 'split-rolls': 'split-rolls', 'jump-gluts': 'jump-gluts', 'flams': 'flams', "jack": "jacks", "mini jacks": "mini-jacks", "jump jacks": "jump-jacks", "split jump jacks": "split-jump-jacks", "hand jacks": "hand-jacks", "poly rhythms": "polyrhythms", "jump streams": "jump-streams", "hand streams": "hand-streams", "jumptrills": "jump-trills", "jump trills": "jump-trills", "split jumptrills": "split-jump-trills", "one hand trills": "one-hand-trills", "split rolls": "split-rolls", "jump gluts": "jump-gluts", "minijacks": "mini-jacks", "mini jacks": "mini-jacks", "jumpjacks": "jump-jacks", "jump jacks": "jump-jacks", "split jumpjacks": "split-jump-jacks", "handjacks": "hand-jacks", "runningmen": "running-men", "running men": "running-men", "grace": "flams", "irregular": "irregular"}
+def contains_word(s, w):
+    return f' {w} ' in f' {s} '
+
+known_patterns = {"mini-jacks": "Mini-Jacks", "jump-jacks": "Jump-Jacks", "split-jump-jacks": "Split-Jump-Jacks", "hand-jacks": "Hand-Jacks", "anchors": "Anchors", "running-men": "Running-Men", "polyrhythms": "Polyrhythms", "jump-streams": "Jump-Streams", 'hand-streams': 'Hand-Streams', 'bursts': 'Bursts', 'trills': 'Trills', 'jump-trills': 'Jump-Trills', 'split-jump-trills': 'Split-Jump-Trills', 'one-hand-trills': 'One-Hand-Trills', 'rolls': 'Rolls', 'split-rolls': 'Split-Rolls', 'jump-gluts': 'Jump-Gluts', 'flams': 'Flams', "mini jacks": "Mini-Jacks", "jump jacks": "Jump-Jacks", "split jump jacks": "Split-Jump-Jacks", "hand jacks": "Hand-Jacks", "poly rhythms": "Polyrhythms", "jump streams": "Jump-Streams", "hand streams": "Hand-Streams", "streams": "Streams", "jumptrills": "Jump-Trills", "jump trills": "Jump-Trills", "split jumptrills": "Split-Jump-Trills", "one hand trills": "One-Hand-Trills", "split rolls": "Split-Rolls", "jump gluts": "Jump-Gluts", "minijacks": "Mini-Jacks", "mini-jacks": "Mini-Jacks", "jumpjacks": "Jump-Jacks", "jump jacks": "Jump-Jacks", "split jumpjacks": "Split-Jump-Jacks", "handjacks": "Hand-Jacks", "chordjacks": "Hand-Jacks", "chord-jacks": "Hand-Jacks", "chord jacks": "Hand-Jacks","jacks": "Jacks", "jack": "Jacks", "runningmen": "Running-Men", "running men": "Running-Men", "grace": "Flams", "irregular": "Irregular", "jumpstreams": "Jump-Streams"}
 
 labels_list = []
 
 Nths = ["64th", "48th", "32nd", "24th", "16th", "12th", "8th", "4th"]
 Na = ["64ths", "48ths", "32nds", "24ths", "16ths", "12ths", "8ths", "4ths"]
 
-username = "Laplace"
+username = ""
 labels = """
-Entrance [Deemo Cut] - 12th Jacks, 12th Hand-Jacks, 12th Jump-Streams | Certain
 
-Sunshine rainy [Heavy] - 24th Bursts, 16th Jump-Streams, 16th Mini-Jacks | Certain
+
 """
 contents = labels.split("\n")
 
@@ -41,7 +43,7 @@ for data in contents:
     # Separate the song name from the rest of the data.
     song_name = data.split(":")
     if len(song_name) == 2:
-        song_name = song_name[0].title()
+        song_name = song_name[0]
         # Remove the song name from the data.
         data = data.replace(song_name + ":", "")
 
@@ -49,14 +51,20 @@ for data in contents:
     else:
         song_name = data.split("-")
         if len(song_name) == 2:
-            song_name = song_name[0].title()
+            song_name = song_name[0]
+            data = data.replace(song_name + "-", "")
+        else:
+            # Create a variable that is the length of the song_name list - 1.
+            song_name_end = len(song_name) - 2
+            # Combine the first two elements in the list.
+            song_name = song_name[0] + "-" + song_name[song_name_end]
+            # Remove the song name from the data.
             data = data.replace(song_name + "-", "")
 
     # Check if the length of song_name is greater than 1.
     if type(song_name) is list and len(song_name) > 1:
         print(f"{song_name} is labeled wrong.") 
-    else:
-        print("Can't find song name.")
+
         
         
 
@@ -97,14 +105,13 @@ for data in contents:
                         word = word.lower()
                         if word not in known_patterns and word not in Nths:
                             pattern = pattern.replace(word, "")
-                            # Remove any extra white space.
-                            pattern = pattern.strip()
-                    # Add dashes between the words.
-                    pattern = pattern.replace(" ", "-")
-                    # Remove the first dash.
-                    pattern = pattern.replace("-", " ", 1)
+                        if word in known_patterns:
+                            pattern = pattern.replace(word, known_patterns[word])
+                        # Remove any extra white space.
+                        pattern = pattern.strip()
                     # Make sure the pattern is capitalized.
-                    patterns[i] = pattern.replace(known_pattern, known_pattern.title())
+                    patterns[i] = pattern.replace(known_pattern, known_patterns[known_pattern])
+
 
                     break
 
@@ -144,8 +151,11 @@ for data in contents:
                 loop = False
             except FileNotFoundError:
                 print("File not found.")
-            
-        final = [song_name[0]]
+        # If the song name is a list.
+        if type(song_name) is list:
+            final = [song_name[0]]
+        else:
+            final = [song_name]
 
         if len(patterns) < 5:
             temp = 5 - len(patterns)
@@ -162,11 +172,11 @@ for data in contents:
         final.append(certainty)
 
         labels_list.append(final)
-        print(df)
+
 
 for i in range(len(labels_list)):
     df.loc[len(df)] = labels_list[i]
-    print(df)
+print(df)
 # Replace the CSV file with the new dataframe.
 df.to_csv(directory, index=False) 
 
