@@ -1,10 +1,5 @@
 import pandas as pd
-import sys
-import time
 import pyautogui
-
-def contains_word(s, w):
-    return f' {w} ' in f' {s} '
 
 known_patterns = {"mini-jacks": "Mini-Jacks", "jump-jacks": "Jump-Jacks", "split-jump-jacks": "Split-Jump-Jacks", "hand-jacks": "Hand-Jacks", "anchors": "Anchors", "running-men": "Running-Men", "polyrhythms": "Polyrhythms", "jump-streams": "Jump-Streams", 'hand-streams': 'Hand-Streams', 'bursts': 'Bursts', 'trills': 'Trills', 'jump-trills': 'Jump-Trills', 'split-jump-trills': 'Split-Jump-Trills', 'one-hand-trills': 'One-Hand-Trills', 'rolls': 'Rolls', 'split-rolls': 'Split-Rolls', 'jump-gluts': 'Jump-Gluts', 'flams': 'Flams', "mini jacks": "Mini-Jacks", "jump jacks": "Jump-Jacks", "split jump jacks": "Split-Jump-Jacks", "hand jacks": "Hand-Jacks", "poly rhythms": "Polyrhythms", "jump streams": "Jump-Streams", "hand streams": "Hand-Streams", "streams": "Streams", "jumptrills": "Jump-Trills", "jump trills": "Jump-Trills", "split jumptrills": "Split-Jump-Trills", "one hand trills": "One-Hand-Trills", "split rolls": "Split-Rolls", "jump gluts": "Jump-Gluts", "minijacks": "Mini-Jacks", "mini-jacks": "Mini-Jacks", "jumpjacks": "Jump-Jacks", "jump jacks": "Jump-Jacks", "split jumpjacks": "Split-Jump-Jacks", "handjacks": "Hand-Jacks", "chordjacks": "Hand-Jacks", "chord-jacks": "Hand-Jacks", "chord jacks": "Hand-Jacks","jacks": "Jacks", "jack": "Jacks", "runningmen": "Running-Men", "running men": "Running-Men", "grace": "Flams", "irregular": "Irregular", "jumpstreams": "Jump-Streams"}
 
