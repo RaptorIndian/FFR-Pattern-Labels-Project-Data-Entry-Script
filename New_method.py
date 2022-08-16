@@ -1,8 +1,11 @@
+from sre_constants import SRE_INFO_PREFIX
 import numpy as np
 import csv
+import pandas as pd
 
-PATH_TO_GOOGLE_FORM_OUTPUT = './Song_Label_Submission_Form.csv'
-PREPROCESSED_OUTPUT_PATH = './PLP - PLP - S1.csv'
+PATH_TO_GOOGLE_FORM_OUTPUT = r'C:\Users\Raptor\Downloads\Song Label Submission Form.csv'
+PREPROCESSED_OUTPUT_PATH = './Temp.csv'
+SPREADSHEET = r'C:\Users\Raptor\Downloads\PLP - PLP - S1.csv'
 
 with open(PATH_TO_GOOGLE_FORM_OUTPUT, newline='') as csvfile:
     with open(PREPROCESSED_OUTPUT_PATH, 'w') as finalfile:
@@ -33,3 +36,15 @@ with open(PATH_TO_GOOGLE_FORM_OUTPUT, newline='') as csvfile:
                 content.append(labeler_name)
                 content.append(accuracy)
                 csvwriter.writerow(content)
+
+# Convert Temp.csv to a pandas dataframe.
+temp_df = pd.read_csv(PREPROCESSED_OUTPUT_PATH)
+
+# Convert the spreadsheet to a pandas dataframe.
+spreadsheet_df = pd.read_csv(SPREADSHEET)
+
+# Append the temp dataframe to the end of the spreadsheet dataframe.
+spreadsheet_df = spreadsheet_df.append(temp_df)
+
+# Replace the spreadsheet with the new dataframe.
+spreadsheet_df.to_csv(SPREADSHEET, index=False)
